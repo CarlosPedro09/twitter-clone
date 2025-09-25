@@ -1,0 +1,58 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  background-color: #f5f8fa;
+  color: #14171a;
+  height: 100vh; /* garante que o body ocupe toda a altura */
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* altura mínima da tela */
+}
+
+.header {
+  background-color: #1da1f2;
+  color: white;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: center; /* centraliza horizontalmente */
+  align-items: center;
+  position: relative; /* permite posicionar links se precisar */
+}
+
+.header h1 {
+  margin: 0;
+  text-align: center; /* centraliza o texto do título */
+}
+
+.header nav {
+  position: absolute;
+  right: 20px; /* mantém os links no canto direito */
+}
+
+.header nav a {
+  color: white;
+  margin-left: 15px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.header nav a:hover {
+  text-decoration: underline;
+}
+
+.main-content {
+  flex: 1; /* faz o main crescer e empurrar o footer para baixo */
+  padding: 20px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+footer.footer {
+  background-color: #1da1f2;
+  color: white;
+  text-align: center;
+  padding: 10px 0;
+}
