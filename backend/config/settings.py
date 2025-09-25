@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 from dotenv import load_dotenv
+import dj_database_url
 
 # Carregar variáveis do .env (local ou Vercel)
 load_dotenv(dotenv_path=Path(__file__).resolve().parent.parent / ".env.dev")
@@ -11,8 +12,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("SECRET_KEY", "django-insecure-default")
 DEBUG = os.environ.get("DEBUG", "True") == "True"
 
-# Permitir o domínio da Vercel e localhost
-ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
+# Permitir o domínio da Vercel, Render e localhost
+ALLOWED_HOSTS = os.environ.get(
+    "DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost,seu-backend.onrender.com"
+).split(",")
 
 # Apps
 INSTALLED_APPS = [
@@ -69,16 +72,11 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "backend.config.wsgi.application"
 
-# Banco de dados (usar variáveis de ambiente da Vercel)
+# Banco de dados (Postgres online via URL)
 DATABASES = {
-    "default": {
-        "ENGINE": os.environ.get("SQL_ENGINE", "django.db.backends.postgresql"),
-        "NAME": os.environ.get("SQL_DATABASE", "twitter_clone"),
-        "USER": os.environ.get("SQL_USER", "carlos09"),
-        "PASSWORD": os.environ.get("SQL_PASSWORD", "admin09"),
-        "HOST": os.environ.get("SQL_HOST", "127.0.0.1"),
-        "PORT": os.environ.get("SQL_PORT", "5432"),
-    }
+    "default": dj_database_url.config(
+        default=os.environ.get("DATABASE_URL")
+    )
 }
 
 # Auth customizado
@@ -126,5 +124,7 @@ INTERNAL_IPS = ["127.0.0.1"]
 # CORS
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",  # React local
+    "https://seu-frontend.vercel.app",  # Frontend na Vercel
 ]
-# CORS_ALLOW_ALL_ORIGINS = True  # opcional, só se for realmente necessário
+# CORS_ALLOW_ALL_ORIGINS = True  # opcional, só se necessário
+

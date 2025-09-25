@@ -2,12 +2,12 @@
   "version": 2,
   "builds": [
     {
-      "src": "backend/config/wsgi.py",
-      "use": "@vercel/python",
-      "config": { "maxLambdaSize": "50mb" }
+      "src": "frontend/package.json",
+      "use": "@vercel/static-build",
+      "config": { "distDir": "frontend/build" }
     }
   ],
   "routes": [
-    { "src": "/(.*)", "dest": "backend/config/wsgi.py" }
+    { "src": "/(.*)", "dest": "/frontend/build/$1" }
   ]
 }
