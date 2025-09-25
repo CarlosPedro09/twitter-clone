@@ -2,7 +2,7 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 
-# Carregar variáveis do .env.dev
+# Carregar variáveis do .env (local ou Vercel)
 load_dotenv(dotenv_path=Path(__file__).resolve().parent.parent / ".env.dev")
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -10,7 +10,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Segurança
 SECRET_KEY = os.environ.get("SECRET_KEY", "django-insecure-default")
 DEBUG = os.environ.get("DEBUG", "True") == "True"
-ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "127.0.0.1").split()
+
+# Permitir o domínio da Vercel e localhost
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
 
 # Apps
 INSTALLED_APPS = [
@@ -67,7 +69,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "backend.config.wsgi.application"
 
-# Banco de dados PostgreSQL
+# Banco de dados (usar variáveis de ambiente da Vercel)
 DATABASES = {
     "default": {
         "ENGINE": os.environ.get("SQL_ENGINE", "django.db.backends.postgresql"),
@@ -100,12 +102,14 @@ USE_TZ = True
 # Arquivos estáticos e mídia
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
+
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
+# Whitenoise para servir arquivos estáticos no deploy
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
-# DRF
+# Django REST Framework
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.TokenAuthentication",
@@ -121,7 +125,6 @@ INTERNAL_IPS = ["127.0.0.1"]
 
 # CORS
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",  # ✅ Porta onde o React está rodando
+    "http://localhost:3000",  # React local
 ]
-# ou se quiser liberar todos temporariamente:
-# CORS_ALLOW_ALL_ORIGINS = True
+# CORS_ALLOW_ALL_ORIGINS = True  # opcional, só se for realmente necessário
